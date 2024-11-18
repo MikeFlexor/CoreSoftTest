@@ -13,6 +13,12 @@ body {
   background-color: #f6f6ff;
 }
 
+label {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
 p-table {
   width: 100%;
   min-height: 0;
@@ -22,5 +28,28 @@ p-table {
     display: flex;
     flex-direction: row;
     grid-gap: 8px;
+  }
+}
+
+p-inputnumber {
+  span {
+    width: 100%;
+  }
+}
+
+p-fieldset {
+  .p-fieldset {
+    margin: 0;
+    padding: 0px 14px 14px 14px;
+  }
+
+  .p-fieldset-legend {
+    padding: 8px;
+    border: none;
+    background-color: #ffffff;
+  }
+
+  .p-fieldset-content {
+    padding: 0;
   }
 }

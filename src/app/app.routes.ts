@@ -8,13 +8,19 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'userdetails',
+    path: 'details',
     loadComponent: async () => {
       return (await import('./components/user-details/user-details.component')).UserDetailsComponent;
     }
   },
   {
-    path: 'userform',
+    path: 'add',
+    loadComponent: async () => {
+      return (await import('./components/user-form/user-form.component')).UserFormComponent;
+    }
+  },
+  {
+    path: 'edit/:id',
     loadComponent: async () => {
       return (await import('./components/user-form/user-form.component')).UserFormComponent;
     }

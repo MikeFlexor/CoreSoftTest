@@ -1,3 +1,39 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+
+  .header {
+    padding: 14px;
+    background-color: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  form, .form-group {
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    grid-gap: 8px;
+
+    .form-row {
+      display: flex;
+      flex-direction: row;
+      grid-gap: 8px;
+
+      input, p-inputNumber {
+        flex-grow: 1;
+
+        &.ng-invalid {
+          background-color: #ffe0e0;
+        }
+      }
+    }
+
+    .submit-button {
+      margin-left: auto;
+      margin-top: 6px;
+    }
+  }
 }

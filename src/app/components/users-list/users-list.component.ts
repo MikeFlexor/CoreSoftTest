@@ -7,6 +7,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { User } from '../../models/models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-list',
@@ -21,13 +22,12 @@ import { User } from '../../models/models';
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UserService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersListComponent implements OnInit {
   selectedUser: User | null = null;
 
-  constructor(public userService: UserService) {}
+  constructor(public userService: UserService, private router: Router) {}
 
   applyFilter(table: Table, event: any, matchMode: string) {
     table.filterGlobal((event.target as HTMLInputElement).value, matchMode);
@@ -39,7 +39,7 @@ export class UsersListComponent implements OnInit {
   }
 
   onAddClick(): void {
-    // TODO
+    this.router.navigate(['add']);
   }
 
   onDeleteClick(): void {
@@ -51,6 +51,8 @@ export class UsersListComponent implements OnInit {
   }
 
   onEditClick(): void {
-    // TODO
+    if (this.selectedUser) {
+      this.router.navigate([`edit/${this.selectedUser.id}`]);
+    }
   }
 }

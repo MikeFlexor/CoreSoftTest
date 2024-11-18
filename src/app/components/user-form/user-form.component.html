@@ -1,1 +1,141 @@
-<p>user-form works!</p>,
+<div class="header">
+  <p-button
+    (onClick)="onGoToListClick()"
+    icon="pi pi-list"
+    label="Перейти к списку пользователей"
+    severity="info"
+  />
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <label for="username">Логин</label>
+    <input
+      formControlName="username"
+      id="username"
+      pInputText
+      type="text"
+    />
+    <label for="name">Имя пользователя</label>
+    <input
+      formControlName="name"
+      id="name"
+      pInputText
+      type="text"
+    />
+  </div>
+
+  <div class="form-row">
+    <label for="email">Email</label>
+    <input
+      formControlName="email"
+      id="email"
+      pInputText
+      type="text"
+    />
+    <label for="phone">Телефон</label>
+    <input
+      formControlName="phone"
+      id="phone"
+      pInputText
+      type="text"
+    />
+    <label for="website">Сайт</label>
+    <input
+      formControlName="website"
+      id="website"
+      pInputText
+      type="text"
+    />
+  </div>
+
+  <p-fieldset legend="Адрес">
+    <div class="form-group" formGroupName="address">
+      <div class="form-row">
+        <label for="city">Город</label>
+        <input
+          formControlName="city"
+          id="city"
+          pInputText
+          type="text"
+        />
+        <label for="street">Улица</label>
+        <input
+          formControlName="street"
+          id="street"
+          pInputText
+          type="text"
+        />
+        <label for="suite">Офис</label>
+        <input
+          formControlName="suite"
+          id="suite"
+          pInputText
+          type="text"
+        />
+      </div>
+  
+      <div class="form-row">
+        <label for="zipcode">Индекс</label>
+        <input
+          formControlName="zipcode"
+          id="zipcode"
+          pInputText
+          type="text"
+        />
+
+        <div class="form-row" formGroupName="geo" style="flex-grow: 1;">
+          <label for="lat">Широта</label>
+          <p-inputNumber
+            [maxFractionDigits]="4"
+            [minFractionDigits]="4"
+            formControlName="lat"
+            id="lat"
+          />
+          <label for="lng">Долгота</label>
+          <p-inputNumber
+            [maxFractionDigits]="4"
+            [minFractionDigits]="4"
+            formControlName="lng"
+            id="lng"
+          />
+        </div>
+      </div>
+    </div>
+  </p-fieldset>
+
+  <p-fieldset legend="Компания">
+    <div class="form-row" formGroupName="company">
+      <label for="companyName">Название</label>
+      <input
+        formControlName="companyName"
+        id="companyName"
+        pInputText
+        type="text"
+      />
+      <label for="catchPhrase">Слоган</label>
+      <input
+        formControlName="catchPhrase"
+        id="catchPhrase"
+        pInputText
+        type="text"
+      />
+      <label for="bs">Направление</label>
+      <input
+        formControlName="bs"
+        id="bs"
+        pInputText
+        type="text"
+      />
+    </div>
+  </p-fieldset>
+
+  <p-button
+    [disabled]="!form.dirty"
+    [label]="submitButtonText"
+    (onClick)="onSubmit()"
+    class="submit-button"
+    icon="pi pi-check"
+    severity="info"
+  />
+</form>

@@ -10,6 +10,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 })
 export class UserService {
   users$ = new BehaviorSubject<User[]>([]);
+  userById$ = new BehaviorSubject<User | null>(null);
 
   private readonly baseUrl = 'https://jsonplaceholder.typicode.com/users';
 
@@ -28,7 +29,7 @@ export class UserService {
             }
             // Правим идентификаторы для избавления от дублирования выделения строк
             for (let i = 0; i < users.length; i++) {
-              users[i].id = i;
+              users[i].id = i + 1;
             }
             this.users$.next(users);
           // Если полученные данные пустые, то генерируем тестовые данные
@@ -49,7 +50,9 @@ export class UserService {
     this.http.get<User>(`${this.baseUrl}/${id}`)
       .pipe(
         tap((response) => {
-          console.log(response);
+          if (response) {
+            this.userById$.next(response);
+          }
         }),
         catchError(() => {
           return throwError(() => new Error());
@@ -105,12 +108,13 @@ export class UserService {
   private getGeneratedUsers(): User[] {
     const users: User[] = [];
 
-    const randomString = (length: number) => {
+    const randomString = (length: number, onlyNumbers?: boolean) => {
       let result = '';
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let counter = 0;
+      const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      const charactersLength = onlyNumbers ? 10 : characters.length;
       while (counter < length) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
         counter += 1;
       }
       return result;
@@ -128,11 +132,11 @@ export class UserService {
           city: randomString(10),
           zipcode: randomString(5),
           geo: {
-            lat: randomString(7),
-            lng: randomString(7)
+            lat: `${+randomString(2, true) * 2 - 100}.${randomString(4, true)}`,
+            lng: `${+randomString(2, true) * 2 - 100}.${randomString(4, true)}`
           } as Geo
         } as Address,
-        phone: randomString(10),
+        phone: randomString(10, true),
         website: randomString(10),
         company: {
           name: randomString(7),
