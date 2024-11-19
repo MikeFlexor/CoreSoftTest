@@ -8,7 +8,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'details',
+    path: 'details/:id',
     loadComponent: async () => {
       return (await import('./components/user-details/user-details.component')).UserDetailsComponent;
     }

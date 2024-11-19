@@ -43,11 +43,15 @@ export class UsersListComponent implements OnInit {
   }
 
   onDeleteClick(): void {
-    // TODO
+    if (this.selectedUser) {
+      this.userService.deleteUser(this.selectedUser.id);
+    }
   }
 
   onDetailsClick(): void {
-    // TODO
+    if (this.selectedUser) {
+      this.router.navigate([`details/${this.selectedUser.id}`]);
+    }
   }
 
   onEditClick(): void {

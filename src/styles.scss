@@ -35,6 +35,18 @@ p-inputnumber {
   span {
     width: 100%;
   }
+
+  &.ng-invalid {
+    input {
+      background-color: #ffe0e0;
+    }
+  }
+
+  &.details-view {
+    input {
+      opacity: 1;
+    }
+  }
 }
 
 p-fieldset {

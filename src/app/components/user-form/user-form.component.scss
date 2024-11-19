@@ -5,7 +5,10 @@
   background-color: #ffffff;
 
   .header {
+    display: flex;
+    flex-direction: row;
     padding: 14px;
+    grid-gap: 8px;
     background-color: #f9fafb;
     border-top: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
@@ -22,12 +25,20 @@
       flex-direction: row;
       grid-gap: 8px;
 
-      input, p-inputNumber {
+      input {
         flex-grow: 1;
 
         &.ng-invalid {
           background-color: #ffe0e0;
         }
+
+        &.details-view {
+          opacity: 1;
+        }
+      }
+
+      p-inputNumber {
+        flex-grow: 1;
       }
     }
 

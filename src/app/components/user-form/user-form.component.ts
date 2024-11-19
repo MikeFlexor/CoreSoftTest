@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -46,12 +46,13 @@ export class UserFormComponent implements OnInit {
       })
     }),
     company: new FormGroup({
-      companyName: new FormControl(''),
+      name: new FormControl(''),
       catchPhrase: new FormControl(''),
       bs: new FormControl('')
     })
   });
   isAddMode: boolean = false;
+  @Input() isDetailsMode: boolean = false;
   get submitButtonText() {
     return this.isAddMode ? 'Добавить' : 'Изменить';
   }
@@ -98,28 +99,40 @@ export class UserFormComponent implements OnInit {
 
   initForm(): void {
     this.form = this.formBuilder.group({
-      username: [this.user ? this.user.username : '', Validators.required],
-      name: [this.user ? this.user.name : '', Validators.required],
-      email: [this.user ? this.user.email : '', [Validators.required, Validators.email]],
-      phone: [this.user ? this.user.phone : '', Validators.required],
-      website: [this.user ? this.user.website : ''],
+      username: [{value: this.user ? this.user.username : '', disabled: this.isDetailsMode}, Validators.required],
+      name: [{value: this.user ? this.user.name : '', disabled: this.isDetailsMode}, Validators.required],
+      email: [{value: this.user ? this.user.email : '', disabled: this.isDetailsMode}, [Validators.required, Validators.email]],
+      phone: [{value: this.user ? this.user.phone : '', disabled: this.isDetailsMode}, Validators.required],
+      website: [{value: this.user ? this.user.website : '', disabled: this.isDetailsMode}],
       address: this.formBuilder.group({
-        city: [this.user ? this.user.address.city : '', Validators.required],
-        street: [this.user ? this.user.address.street : '', Validators.required],
-        suite: [this.user ? this.user.address.suite : '', Validators.required],
-        zipcode: [this.user ? this.user.address.zipcode : '', Validators.required],
+        city: [{value: this.user ? this.user.address.city : '', disabled: this.isDetailsMode}, Validators.required],
+        street: [{value: this.user ? this.user.address.street : '', disabled: this.isDetailsMode}, Validators.required],
+        suite: [{value: this.user ? this.user.address.suite : '', disabled: this.isDetailsMode}, Validators.required],
+        zipcode: [{value: this.user ? this.user.address.zipcode : '', disabled: this.isDetailsMode}, Validators.required],
         geo: this.formBuilder.group({
-          lat: [this.user ? this.user.address.geo.lat : null],
-          lng: [this.user ? this.user.address.geo.lng : null],
+          lat: [{value: this.user ? this.user.address.geo.lat : null, disabled: this.isDetailsMode}],
+          lng: [{value: this.user ? this.user.address.geo.lng : null, disabled: this.isDetailsMode}],
         })
       }),
       company: this.formBuilder.group({
-        companyName: [this.user ? this.user.company.name : '', Validators.required],
-        catchPhrase: [this.user ? this.user.company.catchPhrase : ''],
-        bs: [this.user ? this.user.company.bs : ''],
+        name: [{value: this.user ? this.user.company.name : '', disabled: this.isDetailsMode}, Validators.required],
+        catchPhrase: [{value: this.user ? this.user.company.catchPhrase : '', disabled: this.isDetailsMode}],
+        bs: [{value: this.user ? this.user.company.bs : '', disabled: this.isDetailsMode}],
       })
     });
     this.cdr.markForCheck();
+  }
+
+  onDeleteClick(): void {
+    if (this.user) {
+      this.userService.deleteUser(this.user.id, true);
+    }
+  }
+
+  onEditClick(): void {
+    if (this.user) {
+      this.router.navigate([`edit/${this.user.id}`]);
+    }
   }
 
   onGoToListClick(): void {
@@ -136,7 +149,5 @@ export class UserFormComponent implements OnInit {
     } else if (this.user) {
       this.userService.updateUser({...this.form.value as User, id: this.user.id});
     }
-
-    this.onGoToListClick();
   }
 }
