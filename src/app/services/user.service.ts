@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class UserService {
+  loading$ = new BehaviorSubject<boolean>(false);
   userById$ = new BehaviorSubject<User | null>(null);
   users$ = new BehaviorSubject<User[]>([]);
-
   private readonly baseUrl = 'https://jsonplaceholder.typicode.com/users';
 
   constructor(
@@ -27,6 +27,7 @@ export class UserService {
         tap((users) => {
           if (users.length) {
             localStorage.setItem('users', JSON.stringify(users));
+            this.loading$.next(false);
           }
         }),
         untilDestroyed(this)
@@ -34,7 +35,10 @@ export class UserService {
       .subscribe();
   }
 
+  /** Получение списка пользователей */
   getUsers(): void {
+    this.loading$.next(true);
+
     // Если в локалсторе есть сохраненный список пользователей, то используем его вместо обращения к бэку
     const usersString = localStorage.getItem('users');
     if (usersString) {
@@ -74,6 +78,7 @@ export class UserService {
       .subscribe();
   }
 
+  /** Получение данных пользователя по его идентификатору */
   getUserById(id: number): void {
     this.http.get<User>(`${this.baseUrl}/${id}`)
       .pipe(
@@ -91,6 +96,7 @@ export class UserService {
       .subscribe();
   }
 
+  /** Добавление пользователя */
   addUser(user: User): void {
     this.http.post<User>(this.baseUrl, user)
       .pipe(
@@ -117,6 +123,7 @@ export class UserService {
       .subscribe();
   }
 
+  /** Обновление пользователя */
   updateUser(user: User): void {
     this.http.put<User>(`${this.baseUrl}/${user.id}`, user)
       .pipe(
@@ -139,6 +146,7 @@ export class UserService {
       .subscribe();
   }
 
+  /** Удаление пользователя */
   deleteUser(id: number, redirect?: boolean): void {
     this.http.delete(`${this.baseUrl}/${id}`)
       .pipe(
@@ -163,7 +171,7 @@ export class UserService {
       .subscribe();
   }
 
-  // Тестовое получение сгенерированного списка пользователей для случаев, когда внешнее API недоступно
+  /** Тестовое получение сгенерированного списка пользователей для случаев, когда внешнее API недоступно */
   private getGeneratedUsers(): User[] {
     const users: User[] = [];
 
@@ -209,6 +217,7 @@ export class UserService {
     return users;
   }
 
+  /** Отображение сообщения успеха */
   private showSuccessMessage(message: string): void {
     this.messageService.add({
       severity: 'success',
@@ -216,6 +225,7 @@ export class UserService {
     });
   }
 
+  /** Отображение сообщения ошибки */
   private showErrorMessage(message: string): void {
     this.messageService.add({
       severity: 'error',

@@ -2,6 +2,7 @@
   #table
   [(selection)]="selectedUser"
   [globalFilterFields]="['name', 'email']"
+  [loading]="userService.loading$ | async"
   [paginator]="true"
   [rowHover]="true"
   [rows]="25"
